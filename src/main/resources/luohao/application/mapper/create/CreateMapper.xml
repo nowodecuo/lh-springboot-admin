@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="luohao.application.mapper.create.CreateMapper">
+    <!-- 可创建的数据表-->
+    <select id="queryTableList" resultType="TableDO">
+        show table status
+    </select>
+    <!-- 数据表是否存在-->
+    <select id="queryTableExists" resultType="map">
+        show tables like #{tableName}
+    </select>
+    <!-- 数据表详情-->
+    <select id="queryTableInfo" resultType="TableInfoDO">
+        show full columns from ${tableName}
+    </select>
+</mapper>

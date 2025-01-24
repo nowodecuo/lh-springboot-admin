@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="luohao.application.mapper.admin.AdminMapper">
+    <!-- 查询字段sql -->
+    <sql id="selectSql">
+        select ad_id, ad_name, ad_role_id, ad_header_img, ad_account, ad_city, ad_phone, ad_status, ro_id, ro_name
+        from tb_admin as A
+        left join tb_role as B on A.ad_role_id = B.ro_id
+    </sql>
+    <!-- 管理员分页 -->
+    <select id="findAdminDataPage" resultType="AdminDO">
+        <include refid="selectSql" />
+        <where>
+            FIND_IN_SET(#{roleId}, B.ro_pids) <!-- 查询当前登录管理员角色下级的所有管理员 -->
+            <if test="reqVo.adName != null">and ad_name like concat("%", #{reqVo.adName}, "%")</if>
+            <if test="reqVo.adRoleId != null">and ad_role_id = #{reqVo.adRoleId}</if>
+            <if test="reqVo.adCity != null">and ad_city like concat("%", #{reqVo.adCity}, "%")</if>
+            <if test="reqVo.adPhone != null">and ad_phone = #{reqVo.adPhone}</if>
+            <if test="reqVo.adStatus != null">and ad_status = #{reqVo.adStatus}</if>
+        </where>
+        order by ad_id desc
+    </select>
+    <!-- 根据id查询管理员信息 -->
+    <select id="findAdminDataForId" resultType="AdminDO">
+        <include refid="selectSql" /> where ad_id=#{adminId}
+    </select>
+    <!-- 登录验证查询管理员信息 -->
+    <select id="findAdminDataForLogin" resultType="AdminDO">
+        <include refid="selectSql" /> where ad_account=#{account} and ad_password=#{password}
+    </select>
+    <!-- 判断指定管理员是否是我的下级 -->
+    <select id="findAdminIsMySubordinate" resultType="AdminDO">
+        <include refid="selectSql" />
+        where FIND_IN_SET(#{myRoleId}, B.ro_pids) and ad_id = #{targetId}
+    </select>
+</mapper>

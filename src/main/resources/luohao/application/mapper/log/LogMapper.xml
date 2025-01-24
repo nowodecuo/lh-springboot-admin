@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="luohao.application.mapper.log.LogMapper">
+    <sql id="selectSql">
+        select lo_id, lo_content, lo_method, lo_params, lo_result, lo_reason, lo_ip, lo_address, A.creator, A.create_time, ad_id, ad_name from tb_log as A
+        left join tb_admin as B on A.creator = B.ad_id
+    </sql>
+    <!-- 日志分页 -->
+    <select id="findPageData" resultType="LogDO">
+        <include refid="selectSql" />
+        <where>
+            <if test="reqVo.loContent != null">and lo_content like concat("%",#{reqVo.loContent}, "%")</if>
+            <if test="reqVo.loMethod != null">and lo_method=#{reqVo.loMethod}</if>
+            <if test="reqVo.loResult != null">and lo_result=#{reqVo.loResult}</if>
+            <if test="reqVo.loIp != null">and lo_ip=#{reqVo.loIp}</if>
+            <if test="reqVo.loAddress != null">and lo_address=#{reqVo.loAddress}</if>
+            <if test="reqVo.adName != null">and ad_name like concat("%",#{reqVo.adName}, "%")</if>
+            <if test="reqVo.startTime != null and reqVo.endTime != null">and A.create_time between #{reqVo.startTime} and #{reqVo.endTime}</if>
+        </where>
+        order by lo_id desc
+    </select>
+</mapper>

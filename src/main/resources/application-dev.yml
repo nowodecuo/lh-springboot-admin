@@ -1,0 +1,69 @@
+# 服务配置
+server:
+  port: 6666
+  servlet:
+    # session配置
+    session:
+      timeout: 1800 #过期时间/s
+spring:
+  # redis
+  redis:
+    port: 6379
+    host: localhost
+  # mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/db_springboot_application?serverTimezone=Asia/Shanghai
+  # 上传大小配置
+  servlet:
+    multipart:
+      max-request-size: 100MB #总大小
+      max-file-size: 10MB #单个大小
+
+################################[自定义配置]########################################
+# 缓存过期时间(秒)
+cache-expire: 7200
+# 文件保存根路径
+file-root-path: D:/Work/Project/lh-backstage-manage-system/lh-springboot-admin
+# 文件上传路径
+upload-path: ${file-root-path}/uploads
+# 登录用户
+user:
+  # 用户信息缓存key前缀
+  key-prefix: user_info_
+  # 是否验证码校验，
+  captcha-check: true
+  # 验证码缓存key前缀
+  captcha-prefix: captcha_
+  # 验证码缓存时间(秒)
+  captcha-expire: 60
+# 授权规则
+auth-rule:
+  # 授权规则开关，false将不校验用户权限规则
+  open: true
+  # 用户授权规则缓存key前缀
+  key-prefix: auth_rule_
+# 创建curd
+create:
+  # 创建curd文件保存路径
+  file-path: ${file-root-path}/createFile
+# jwt令牌秘钥
+jwt-secret: lh-springboot-admin-jwt-secret-dev
+# sm4秘钥
+sm4-secret: 86AE5AF211A0BD1EA013ACDE3F3BCD37
+# 微信配置
+wechat:
+  appid: xxxxxxxx
+  appSecret: xxxxxxxxx
+# 阿里云配置
+aliyun:
+  # oss配置
+  oss:
+    url: https://xxx.xxx.xxx/static/ #文件访问域名
+    endpoint: https://oss-cn-chengdu.aliyuncs.com #地域节点
+    accessKeyId: xxxxxxxxxx
+    accessKeySecret: xxxxxxxxx
+    bucketName: lh-oss-test #对象存储 bucket名称
+    objectPath: static/ #对象存储路径
